@@ -1,0 +1,94 @@
+﻿<Window
+    x:Class="WpfApp1.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    Title="Variable Height Cells"
+    Width="1440"
+    Height="900">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="6*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+
+
+        <ScrollViewer
+            Grid.Row="1"
+            Grid.Column="1"
+            Grid.ColumnSpan="2">
+            <ItemsControl HorizontalAlignment="Left" ItemsSource="{Binding People}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <md:TransitioningContent OpeningEffect="{md:TransitionEffect Kind=ExpandIn}">
+                            <Grid
+                                Width="220"
+                                MinHeight="180"
+                                MaxHeight="250"
+                                Margin="8">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseLeftButtonUp">
+                                        <i:InvokeCommandAction Command="{Binding 0.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition />
+
+                                </Grid.RowDefinitions>
+
+
+                                <Border
+                                    Grid.RowSpan="2"
+                                    Background="#1E90FF"
+                                    CornerRadius="3" />
+                                <TextBlock
+                                    Padding="10,5"
+                                    FontWeight="Bold"
+                                    Text="{Binding Name}" />
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Padding="10,5"
+                                    Text="{Binding Pe, StringFormat={}Pe：{0} kW}" />
+
+                                <Canvas Grid.RowSpan="2" ClipToBounds="True">
+                                    <Border
+                                        Canvas.Top="10"
+                                        Canvas.Right="-50"
+                                        Width="120"
+                                        Height="120"
+                                        Background="#FFFFFF"
+                                        CornerRadius="100"
+                                        Opacity="0.1" />
+                                    <Border
+                                        Canvas.Top="80"
+                                        Canvas.Right="-30"
+                                        Width="120"
+                                        Height="120"
+                                        Background="#FFFFFF"
+                                        CornerRadius="100"
+                                        Opacity="0.1" />
+                                </Canvas>
+
+                            </Grid>
+                        </md:TransitioningContent>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Window>
