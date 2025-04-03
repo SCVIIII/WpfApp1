@@ -3,10 +3,23 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
     Title="Variable Height Cells"
     Width="1440"
     Height="900">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme
+                    BaseTheme="Light"
+                    PrimaryColor="DeepPurple"
+                    SecondaryColor="Lime" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -19,76 +32,174 @@
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
-
-
-        <ScrollViewer
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Grid.Column="0"
+            Margin="5"
+            Background="Gray"
+            BorderBrush="#484843 "
+            BorderThickness="0.5"
+            CornerRadius="5">
+            <TextBlock
+                Margin="10,10"
+                FontSize="20"
+                Foreground="White"
+                Text="导航页预留" />
+        </Border>
+        <Border
+            Grid.Row="0"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Margin="5"
+            Background="Gray"
+            BorderBrush="#484843 "
+            BorderThickness="0.5"
+            CornerRadius="5">
+            <TextBlock
+                Margin="10,10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="20"
+                Foreground="White"
+                Text="上部功能区预留" />
+        </Border>
+        <!--  使用 Border 包裹 ScrollViewer 并设置边框样式  -->
+        <Border
             Grid.Row="1"
             Grid.Column="1"
-            Grid.ColumnSpan="2">
-            <ItemsControl HorizontalAlignment="Left" ItemsSource="{Binding People}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
+            Grid.ColumnSpan="2"
+            BorderBrush="#484843 "
+            BorderThickness="0.5"
+            CornerRadius="5">
+            <ScrollViewer
+                Grid.Row="1"
+                Grid.Column="1"
+                Grid.ColumnSpan="2">
+                <ItemsControl HorizontalAlignment="Left" ItemsSource="{Binding People}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <md:TransitioningContent OpeningEffect="{md:TransitionEffect Kind=ExpandIn}">
-                            <Grid
-                                Width="220"
-                                MinHeight="180"
-                                MaxHeight="250"
-                                Margin="8">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseLeftButtonUp">
-                                        <i:InvokeCommandAction Command="{Binding 0.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto" />
-                                    <RowDefinition />
-
-                                </Grid.RowDefinitions>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <md:TransitioningContent OpeningEffect="{md:TransitionEffect Kind=ExpandIn}">
+                                <Grid
+                                    Width="180"
+                                    MinHeight="180"
+                                    MaxHeight="250"
+                                    Margin="8">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="MouseLeftButtonUp">
+                                            <i:InvokeCommandAction Command="{Binding 0.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto" />
+                                        <RowDefinition />
 
 
-                                <Border
-                                    Grid.RowSpan="2"
-                                    Background="#1E90FF"
-                                    CornerRadius="3" />
-                                <TextBlock
-                                    Padding="10,5"
-                                    FontWeight="Bold"
-                                    Text="{Binding Name}" />
-                                <TextBlock
-                                    Grid.Row="1"
-                                    Padding="10,5"
-                                    Text="{Binding Pe, StringFormat={}Pe：{0} kW}" />
+                                    </Grid.RowDefinitions>
 
-                                <Canvas Grid.RowSpan="2" ClipToBounds="True">
+
                                     <Border
-                                        Canvas.Top="10"
-                                        Canvas.Right="-50"
-                                        Width="120"
-                                        Height="120"
-                                        Background="#FFFFFF"
-                                        CornerRadius="100"
-                                        Opacity="0.1" />
-                                    <Border
-                                        Canvas.Top="80"
-                                        Canvas.Right="-30"
-                                        Width="120"
-                                        Height="120"
-                                        Background="#FFFFFF"
-                                        CornerRadius="100"
-                                        Opacity="0.1" />
-                                </Canvas>
+                                        Grid.RowSpan="2"
+                                        Background="White"
+                                        BorderBrush="#86909C"
+                                        BorderThickness="1.8"
+                                        CornerRadius="3" />
+                                    <StackPanel>
+                                        <TextBlock
+                                            Padding="10,5"
+                                            FontSize="16"
+                                            FontWeight="Bold"
+                                            Foreground="Black"
+                                            Text="{Binding Name}" />
+                                        <TextBlock
+                                            Padding="0,0"
+                                            FontSize="10"
+                                            FontWeight="Bold"
+                                            Foreground="Black"
+                                            Text="   ___________________________"
+                                            Visibility="Hidden" />
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            Padding="10,5,0,0"
+                                            FontSize="14"
+                                            Foreground="#86909C"
+                                            Text="{Binding Pe, StringFormat={}Pe：{0} kW}" />
 
-                            </Grid>
-                        </md:TransitioningContent>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                                        <TextBlock
+                                            Padding="10,3,0,0"
+                                            FontSize="14"
+                                            Foreground="#86909C"
+                                            Text="Izd=50A" />
+                                        <TextBlock
+                                            Padding="10,3,0,0"
+                                            FontSize="14"
+                                            Foreground="#86909C"
+                                            Text="非消防" />
+                                        <TextBlock
+                                            Padding="10,3,0,0"
+                                            FontSize="14"
+                                            Foreground="#86909C"
+                                            Text="T接" />
+                                        <TextBlock
+                                            Padding="10,3,0,0"
+                                            FontSize="14"
+                                            Foreground="#86909C"
+                                            Text="1-1P1/WP1" />
+                                        <Button
+                                            Margin="0,10,10,8"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Bottom"
+                                            Background="White"
+                                            BorderThickness="1.5"
+                                            Content="修改配电箱"
+                                            FontSize="12"
+                                            Foreground="Black" />
+                                    </StackPanel>
+
+
+
+
+                                    <!--  背景的装饰圆形  -->
+                                    <Canvas Grid.RowSpan="2" ClipToBounds="True">
+                                        <Border
+                                            Canvas.Top="10"
+                                            Canvas.Right="-50"
+                                            Width="120"
+                                            Height="120"
+                                            Background="#FFFFFF"
+                                            CornerRadius="100"
+                                            Opacity="0.1" />
+                                        <Border
+                                            Canvas.Top="80"
+                                            Canvas.Right="-30"
+                                            Width="120"
+                                            Height="120"
+                                            Background="#FFFFFF"
+                                            CornerRadius="100"
+                                            Opacity="0.1" />
+                                    </Canvas>
+
+                                </Grid>
+                            </md:TransitioningContent>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <Button
+            Grid.Row="2"
+            Grid.Column="2"
+            Width="150"
+            Command="{Binding TestCommand}"
+            Content="创建数据库" />
+
+
     </Grid>
 </Window>
