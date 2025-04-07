@@ -5,24 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp1.Dtos
+namespace WpfApp1.Dto
 {
-    public class HuiluForXTTDtos : ObservableObject
+    internal class TestDtos
     {
-
-    }
-
-    /// <summary>
-    /// 存放XTT配电箱出线回路的功能
-    /// </summary>
-    public enum HuiluOptions
-    {
-        Error = 0,
-        子配电箱N = 1,
-        AC控制箱及风机盘管d = 2,
-        照明m = 3,
-        插座c = 4,
-        智能照明mk = 5,
     }
 
     public partial class XTTHuiluDto : ObservableObject
@@ -31,20 +17,21 @@ namespace WpfApp1.Dtos
         //[ObservableProperty]
         //手动添加的属性
         //负荷计算
-        //private double _pe = 0;
-        //private double _kx = 1.0;
-        //private double _cos = 0.9;
+        private double _pe = 0;
+        private double _kx = 1.0;
+        private double _cos = 0.9;
+        //[ObservableProperty] private bool _isChecked=false; //是否选中
 
         //MVVM自动生成的属性
         [ObservableProperty] private string _idGuihao = string.Empty; //所属的配电箱名称
-        [ObservableProperty] private string _idHuilu  = string.Empty; //回路编号
+        [ObservableProperty] private string _idHuilu = string.Empty; //回路编号
         [ObservableProperty] private double _in;                      //整定电流
 
         [ObservableProperty] private string _cableType = string.Empty;
         [ObservableProperty] private string _cable = string.Empty;
         [ObservableProperty] private double _cableCSA = 2.5;
 
-        
+
 
         //回路信息
         [ObservableProperty] private string _purpose = string.Empty; // 用途
@@ -58,7 +45,6 @@ namespace WpfApp1.Dtos
         [ObservableProperty] private bool _isInsert = false;      // 此回路是否可以插入
         [ObservableProperty] private string _vE = string.Empty;   // 剩余电流保护器
         [ObservableProperty] private string _phase = string.Empty;  //单相/三相
-        [ObservableProperty] private HuiluOptions _huiluStatus;     //区分回路用途
 
         //以下为预留字段
         [ObservableProperty] private string _info1 = string.Empty;
@@ -75,41 +61,29 @@ namespace WpfApp1.Dtos
 
         /// <summary>
         /// 功率
-        ///// </summary>
-        //public double Pe
-        //{
-        //    get => _pe;
-        //    set => SetProperty(ref _pe, Math.Round(value, 1)); // 限定为一位小数
-        //}
-
-        //public double Kx
-        //{
-        //    get => _kx;
-        //    set => SetProperty(ref _kx, Math.Round(value, 1)); // 限定为一位小数
-        //}
-        //public double Cos
-        //{
-        //    get => _cos;
-        //    set => SetProperty(ref _cos, Math.Round(value, 1)); // 限定为一位小数
+        /// </summary>
+        public double Pe
+        {
+            get => _pe;
+            set => SetProperty(ref _pe, Math.Round(value, 1)); // 限定为一位小数
         }
-       
+
+        public double Kx
+        {
+            get => _kx;
+            set => SetProperty(ref _kx, Math.Round(value, 1)); // 限定为一位小数
+        }
+        public double Cos
+        {
+            get => _cos;
+            set => SetProperty(ref _cos, Math.Round(value, 1)); // 限定为一位小数
+        }
+
         /// <summary>
         /// 计算电流（只读属性）
-        ///// </summary>
-        //public double Ijs => Math.Round(Pe * Kx / Cos / 0.38 / 1.732, 1); // Ijs 计算为一位小数
-        ///// <summary>
-        ///// 整定电流
-        ///// </summary>
-        //public double In
-        //{
-        //    get => _in;
-        //    set => SetProperty(ref _in, Math.Round(value, 0));
-        //}
-
-        
+        /// </summary>
+        public double Ijs => Math.Round(Pe * Kx / Cos / 0.38 / 1.732, 1); // Ijs 计算为一位小数
 
 
     }
-
-
 }

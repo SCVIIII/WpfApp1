@@ -7,18 +7,18 @@ using static System.Net.Mime.MediaTypeNames;
 
 using System.Data.SQLite;
 using System.Windows;
-using WpfApp1.Dtos;
+using WpfApp1.Dto;
 
 namespace WpfApp1
 {
     public  class Window1ViewModel : ObservableObject
     {
         //测试回路dto
-        private ObservableCollection<XTTHuiluDto> _huilus;
-        public ObservableCollection<XTTHuiluDto> Huilus
+        private ObservableCollection<DatagridHuiluDto> _datadridhuilus;
+        public ObservableCollection<DatagridHuiluDto> DatagridHuilu
         {
-            get => _huilus;
-            set => SetProperty(ref _huilus, value);  // SetProperty 自动触发通知
+            get => _datadridhuilus;
+            set => SetProperty(ref _datadridhuilus, value);  // SetProperty 自动触发通知
         }
 
 
@@ -50,8 +50,9 @@ namespace WpfApp1
                 new Person { Name = "1AL2", Pe = 25 },
             };
 
-            var p1 = new XTTHuiluDto();
-            p1.In = 0;
+            
+
+
         }
 
         private void Test()
@@ -119,6 +120,9 @@ namespace WpfApp1
         public string Name { get; set; }
         public double Pe { get; set; }
     }
-  
+
+   
     
+
+
 }

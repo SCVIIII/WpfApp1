@@ -1,0 +1,98 @@
+﻿<Window
+    x:Class="WpfApp1.XTTView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+    Title="Variable Height Cells"
+    Width="1440"
+    Height="900">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme
+                    BaseTheme="Light"
+                    PrimaryColor="DeepPurple"
+                    SecondaryColor="Lime" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="6*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+
+
+        <Button
+            Grid.Row="0"
+            Grid.Column="0"
+            Content="按钮" />
+
+        <!--  使用 Border 包裹 ScrollViewer 并设置边框样式  -->
+        <Border
+            Grid.Row="1"
+            Grid.Column="1"
+            Grid.ColumnSpan="1"
+            BorderBrush="#484843 "
+            BorderThickness="0.5"
+            CornerRadius="5">
+
+            <DataGrid
+                x:Name="myDataGrid"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
+                ItemsSource="{Binding DatagridHuilu}">
+                <DataGrid.Columns>
+                    <!--  第一列：勾选框  -->
+                    <DataGridTemplateColumn Header="选择">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!--  第二列：按钮  -->
+                    <DataGridTemplateColumn Header="操作">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+
+                                <Button
+                                    Height="auto"
+                                    Command="{Binding DataContext.OnButtonClick, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    Content="点击" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!--  第三列：显示的字符串  -->
+                    <DataGridTextColumn Binding="{Binding IdGuihao}" Header="第3列" />
+                    <DataGridTextColumn Binding="{Binding IdHuilu}" Header="第4列" />
+                    <DataGridTextColumn Binding="{Binding Pe}" Header="第5列" />
+                    <DataGridTextColumn Binding="{Binding In}" Header="第6列" />
+                    <DataGridTextColumn Binding="{Binding CableType}" Header="第7列" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </Border>
+
+
+
+
+
+
+
+    </Grid>
+</Window>

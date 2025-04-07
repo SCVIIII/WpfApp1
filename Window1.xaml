@@ -5,19 +5,19 @@
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
-    Title="Variable Height Cells"
     Width="1440"
     Height="900">
     <Window.Resources>
+
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <materialDesign:BundledTheme
                     BaseTheme="Light"
                     PrimaryColor="DeepPurple"
                     SecondaryColor="Lime" />
+
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
@@ -76,7 +76,7 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Grid.ColumnSpan="2">
-                <ItemsControl HorizontalAlignment="Left" ItemsSource="{Binding People}">
+                <ItemsControl HorizontalAlignment="Left" ItemsSource="{Binding DatagridHuilu}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />
@@ -91,11 +91,7 @@
                                     MinHeight="180"
                                     MaxHeight="250"
                                     Margin="8">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="MouseLeftButtonUp">
-                                            <i:InvokeCommandAction Command="{Binding 0.SelectCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
+
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="auto" />
                                         <RowDefinition />
@@ -116,7 +112,7 @@
                                             FontSize="16"
                                             FontWeight="Bold"
                                             Foreground="Black"
-                                            Text="{Binding Name}" />
+                                            Text="{Binding IdGuihao}" />
                                         <TextBlock
                                             Padding="0,0"
                                             FontSize="10"
