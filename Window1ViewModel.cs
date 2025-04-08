@@ -62,7 +62,12 @@ namespace WpfApp1
             try
             {
                 // 数据库连接字符串
-                string connectionString = "Data Source=MyFirstDatabase0402.db;Version=3;";
+
+                // 指定数据库文件路径
+                string dbPath = @"D:\Mycode\Database\MyFirstDatabase0402.db";
+
+                // 数据库连接字符串
+                string connectionString = $"Data Source={dbPath};Version=3;";
 
                 // 创建数据库文件（如果不存在）
                 SQLiteConnection.CreateFile("MyFirstDatabase0402.db");

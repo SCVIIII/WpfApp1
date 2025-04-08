@@ -18,7 +18,14 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <!--  定义 DataGridColumnHeader 的样式  -->
+            <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
         </ResourceDictionary>
+
+
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -43,17 +50,30 @@
         <Border
             Grid.Row="1"
             Grid.Column="1"
-            Grid.ColumnSpan="1"
+            Grid.ColumnSpan="2"
             BorderBrush="#484843 "
             BorderThickness="0.5"
             CornerRadius="5">
 
             <DataGrid
                 x:Name="myDataGrid"
+                HorizontalAlignment="Left"
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
                 ItemsSource="{Binding DatagridHuilu}">
+
+                <!--<DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="FontSize" Value="14" />
+                -->
+                <!--  可选：同时设置字体粗细  -->
+                <!--
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>-->
+
                 <DataGrid.Columns>
+
+
                     <!--  第一列：勾选框  -->
                     <DataGridTemplateColumn Header="选择">
                         <DataGridTemplateColumn.CellTemplate>
@@ -78,11 +98,24 @@
                     </DataGridTemplateColumn>
 
                     <!--  第三列：显示的字符串  -->
-                    <DataGridTextColumn Binding="{Binding IdGuihao}" Header="第3列" />
-                    <DataGridTextColumn Binding="{Binding IdHuilu}" Header="第4列" />
-                    <DataGridTextColumn Binding="{Binding Pe}" Header="第5列" />
-                    <DataGridTextColumn Binding="{Binding In}" Header="第6列" />
-                    <DataGridTextColumn Binding="{Binding CableType}" Header="第7列" />
+                    <DataGridTextColumn
+                        Width="80"
+                        Binding="{Binding IdGuihao}"
+                        FontSize="14"
+                        Header="所属箱号" />
+                    <DataGridTextColumn Binding="{Binding IdHuilu}" Header="回路号" />
+                    <DataGridTextColumn Binding="{Binding Pe}" Header="Pe" />
+                    <DataGridTextColumn Binding="{Binding In}" Header="In" />
+                    <DataGridTextColumn Binding="{Binding In}" Header="cos" />
+                    <DataGridTextColumn Binding="{Binding In}" Header="Ijs" />
+                    <DataGridTextColumn Binding="{Binding CableType}" Header="导线类型" />
+                    <DataGridTextColumn Binding="{Binding CableType}" Header="导线截面" />
+                    <DataGridTextColumn Binding="{Binding CableType}" Header="导线类型" />
+                    <DataGridTextColumn Binding="{Binding CableType}" Header="导线类型" />
+                    <DataGridTextColumn Binding="{Binding CableType}" Header="导线类型" />
+
+
+                    <DataGridTextColumn Binding="{Binding CableType}" Header="导线类型" />
                 </DataGrid.Columns>
             </DataGrid>
 
