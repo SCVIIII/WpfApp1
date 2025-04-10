@@ -97,6 +97,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Dto\TestDtos.cs" />
+    <Compile Include="PUBData\PUBCreateDatas.cs" />
     <Compile Include="Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
@@ -154,11 +155,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="SQLite\" />
+    <Folder Include="SQLiteService\" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="packages\CommunityToolkit.Mvvm.8.4.0\analyzers\dotnet\roslyn4.0\cs\CommunityToolkit.Mvvm.SourceGenerators.dll" />
     <Analyzer Include="packages\CommunityToolkit.Mvvm.8.4.0\analyzers\dotnet\roslyn4.3\cs\CommunityToolkit.Mvvm.CodeFixers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IFOXSQLiteCodes01\IFOXSQLiteCodes01.csproj">
+      <Project>{5c53f69a-1ecf-4997-880e-110ce948f049}</Project>
+      <Name>IFOXSQLiteCodes01</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

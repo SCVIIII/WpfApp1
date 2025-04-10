@@ -8,6 +8,7 @@
     Title="Variable Height Cells"
     Width="1440"
     Height="900">
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -60,16 +61,8 @@
                 HorizontalAlignment="Left"
                 AutoGenerateColumns="False"
                 CanUserAddRows="False"
+                CellEditEnding="MyDataGrid_CellEditEnding"
                 ItemsSource="{Binding DatagridHuilu}">
-
-                <!--<DataGrid.ColumnHeaderStyle>
-                    <Style TargetType="DataGridColumnHeader">
-                        <Setter Property="FontSize" Value="14" />
-                -->
-                <!--  可选：同时设置字体粗细  -->
-                <!--
-                    </Style>
-                </DataGrid.ColumnHeaderStyle>-->
 
                 <DataGrid.Columns>
 
@@ -89,10 +82,15 @@
                             <DataTemplate>
 
                                 <Button
+                                    Width="60"
                                     Height="auto"
+                                    Margin="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
                                     Command="{Binding DataContext.OnButtonClick, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding}"
-                                    Content="点击" />
+                                    Content="点击"
+                                    FontSize="10" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -102,30 +100,51 @@
                         Width="80"
                         Binding="{Binding IdGuihao}"
                         FontSize="14"
-                        Header="所属箱号" />
+                        Header="所属箱号"
+                        IsReadOnly="True" />
                     <DataGridTextColumn Binding="{Binding IdHuilu}" Header="回路号" />
-                    <DataGridTextColumn Binding="{Binding Pe}" Header="Pe" />
-                    <DataGridTextColumn Binding="{Binding In}" Header="In" />
-                    <DataGridTextColumn Binding="{Binding In}" Header="cos" />
-                    <DataGridTextColumn Binding="{Binding In}" Header="Ijs" />
-                    <DataGridTextColumn Binding="{Binding CableType}" Header="导线类型" />
-                    <DataGridTextColumn Binding="{Binding CableType}" Header="导线截面" />
-                    <DataGridTextColumn Binding="{Binding CableType}" Header="导线类型" />
-                    <DataGridTextColumn Binding="{Binding CableType}" Header="导线类型" />
-                    <DataGridTextColumn Binding="{Binding CableType}" Header="导线类型" />
+                    <DataGridTextColumn Binding="{Binding Pe, Mode=TwoWay}" Header="Pe" />
+                    <DataGridTextColumn Binding="{Binding Izd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="In" />
+                    <DataGridTextColumn Binding="{Binding Cos}" Header="cos" />
+                    <DataGridTextColumn
+                        Binding="{Binding Ijs}"
+                        Header="Ijs"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn Binding="{Binding CableType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="导体类型" />
+                    <DataGridTemplateColumn Header="导体类型">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.ItemsCableType, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding CableType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding Cable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="导线截面" />
+                    <DataGridTemplateColumn Header="单相三相">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.ItemsDansanxiang, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding Phase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="套管">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.ItemsTaoguan, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding TaoguanType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding Fushe}" Header="敷设" />
+                    <DataGridTextColumn Binding="{Binding PurposeType}" Header="回路类型" />
+                    <DataGridTextColumn Binding="{Binding TaoguanCSA}" Header="套管截面" />
+
+                    <DataGridTextColumn Header="回路功能" />
+                    <DataGridTextColumn Header="风机用途" />
 
 
-                    <DataGridTextColumn Binding="{Binding CableType}" Header="导线类型" />
                 </DataGrid.Columns>
             </DataGrid>
 
         </Border>
-
-
-
-
-
-
-
     </Grid>
 </Window>

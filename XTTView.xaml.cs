@@ -24,5 +24,25 @@ namespace WpfApp1
             InitializeComponent();
             DataContext = new XTTViewModel();
         }
+
+        private void MyDataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            // 判断是否是第四列（回路号列）
+
+            var editedColumn = e.Column as DataGridTextColumn;
+            if (editedColumn != null && e.Column.DisplayIndex <= 5)
+            {
+                // 获取正在编辑的控件，假设是 TextBox
+                var textBox = e.EditingElement as TextBox;
+                if (textBox != null)
+                {
+                    // 全选文本
+                    textBox.SelectAll();
+                }
+            }
+        }
+
+
     }
+    
 }

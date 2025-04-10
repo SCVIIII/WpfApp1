@@ -54,7 +54,9 @@
         <Rectangle
             Grid.Row="1"
             Grid.RowSpan="4"
-            Fill="LightGreen" Margin="98,2,2,47" Grid.ColumnSpan="2" />
+            Grid.ColumnSpan="2"
+            Margin="98,2,2,47"
+            Fill="LightGreen" />
         <Rectangle
             Grid.Row="4"
             Grid.RowSpan="5"
