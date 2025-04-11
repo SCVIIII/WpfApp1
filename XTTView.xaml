@@ -105,12 +105,6 @@
                     <DataGridTextColumn Binding="{Binding IdHuilu}" Header="回路号" />
                     <DataGridTextColumn Binding="{Binding Pe, Mode=TwoWay}" Header="Pe" />
                     <DataGridTextColumn Binding="{Binding Izd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="In" />
-                    <DataGridTextColumn Binding="{Binding Cos}" Header="cos" />
-                    <DataGridTextColumn
-                        Binding="{Binding Ijs}"
-                        Header="Ijs"
-                        IsReadOnly="True" />
-                    <DataGridTextColumn Binding="{Binding CableType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="导体类型" />
                     <DataGridTemplateColumn Header="导体类型">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -118,11 +112,12 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Binding="{Binding Cable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="导线截面" />
+                    <DataGridTextColumn Binding="{Binding Cable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="导体截面" />
+                    <DataGridTextColumn Binding="{Binding CircuitBreaker_CD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="C/D曲线" />
                     <DataGridTemplateColumn Header="单相三相">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox ItemsSource="{Binding DataContext.ItemsDansanxiang, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding Phase, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <ComboBox ItemsSource="{Binding DataContext.Items_CircuitBreaker_Type, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding CircuitBreaker_Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -130,12 +125,20 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding DataContext.ItemsTaoguan, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding TaoguanType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Binding="{Binding Fushe}" Header="敷设" />
                     <DataGridTextColumn Binding="{Binding PurposeType}" Header="回路类型" />
+
+                    <DataGridTemplateColumn Header="回路类型">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.Items_Huilu_Purpose, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding PurposeType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                     <DataGridTextColumn Binding="{Binding TaoguanCSA}" Header="套管截面" />
 
                     <DataGridTextColumn Header="回路功能" />

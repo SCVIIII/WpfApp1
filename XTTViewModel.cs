@@ -14,22 +14,38 @@ using WpfApp1.Dto;
 using static MaterialDesignThemes.Wpf.Theme.ToolBar;
 using static System.Net.Mime.MediaTypeNames;
 using IFOXSQLiteCodes01;
+using AutoMapper;
+using static MaterialDesignThemes.Wpf.Theme;
 
 namespace WpfApp1
 {
     public partial  class XTTViewModel : ObservableObject
     {
-
+        #region combox的数据源
         //combox的数据源
         //单相三相
         [ObservableProperty]
-        private List<string> _itemsDansanxiang;
+        private List<string> _items_CircuitBreaker_Type;
         //套管类型 地上JDG,地下SC
         [ObservableProperty]
         private List<string> _itemsTaoguan;
         //导体类型 电线、电缆、消防
         [ObservableProperty]
         private List<string> _itemsCableType;
+        //存放筛选处理后的配电箱及对应回路信息
+        [ObservableProperty]
+        private List<string> _items_Huilu_Purpose;
+
+        #endregion
+
+        private ObservableCollection<XTTHuiluList_Dto> _list_xTTHuilus;
+        public ObservableCollection<XTTHuiluList_Dto> List_xTTHuilus
+        {
+            get => _list_xTTHuilus;
+            set => SetProperty(ref _list_xTTHuilus, value);
+        }
+
+
 
         //测试回路dto
         private ObservableCollection<DatagridHuiluDto> _datadridhuilus;
@@ -41,28 +57,68 @@ namespace WpfApp1
 
         public  XTTViewModel()
         {
-            ItemsCableType = PUBData.PUBCreateDatas.Cre_CableType_Dianxian_And_Dianlan();
-            ItemsDansanxiang = PUBData.PUBCreateDatas.Cre_CableType_Danxiang_And_Sanxiang();
+            ItemsCableType =   PUBData.PUBCreateDatas.Cre_CableType_Dianxian_And_Dianlan();
+            Items_CircuitBreaker_Type = PUBData.PUBCreateDatas.Cre_CircuitBreaker_Type();
             ItemsTaoguan = PUBData.PUBCreateDatas.Cre_Taoguan_Type();
+            Items_Huilu_Purpose = PUBData.PUBCreateDatas.Cre_Huilu_Purpose();
 
             // 初始化命令，使用 RelayCommand<DatagridHuiluDto> 来传递参数
             OnButtonClick = new RelayCommand<DatagridHuiluDto>(Test2); // 初始化命令
-            DatagridHuilu = new ObservableCollection<DatagridHuiluDto>
-            {
-                new DatagridHuiluDto { IdGuihao = "1AL1", IdHuilu = "N1",Pe=1 ,Izd = 16, PurposeType = "照明",Cos=0.9,VE="30mA", CableType="WDZ-BYJ",L123="L123", Phase="1P", TaoguanType="SC",Fushe="MR/WC/CC"},
-                new DatagridHuiluDto { IdGuihao = "1AL1", IdHuilu = "m1",Pe=1 ,Izd = 25, PurposeType = "插座", CableType="BTLY",L123="L123"},
-                new DatagridHuiluDto { IdGuihao = "1AL1", IdHuilu = "N1", Pe = 1, Izd = 30, PurposeType = "照明", CableType = "BTLY", L123 = "L123" },
-                new DatagridHuiluDto { IdGuihao = "1AL4", IdHuilu = "N1", Pe = 1, Izd = 25, PurposeType = "插座", CableType = "BTLY", L123 = "L123" },
-            };
-
-            var test01 = new DatagridHuiluDto { IdGuihao = "3AP1", IdHuilu = "N1", Pe = 1, Izd = 25, PurposeType = "照明", Cos = 0.9, VE = "30mA", CableType = "WDZ-BYJ", L123 = "L123", Phase = "单相", TaoguanType = "SC" };
-            var test02 = IFOXSQLiteCodes01.Query.SQLQueryCable.SQL_Query_Cable01(25);
-            test01.Fushe = test02.Byj380 + test02.Scbyj380;
-            DatagridHuilu.Add(test01);
-
+            
             #region 2025年4月10日新增：回路分析与处理函数，涉及两个项目的class调整，错误极多
 
+            var XTTHuilus = new List<XTTHuiluDto>()
+            { 
+                new XTTHuiluDto {IdGuihao = "5AL1", IdHuilu = "m1", TaoguanType="SC",CircuitBreaker_Brand="schneider" },
+                new XTTHuiluDto {IdGuihao = "5AL1", IdHuilu = "m2", TaoguanType="SC",CircuitBreaker_Brand="schneider"},
+                new XTTHuiluDto {IdGuihao = "5AL1", IdHuilu = "c1", TaoguanType="SC",CircuitBreaker_Brand="schneider"},
+                new XTTHuiluDto {IdGuihao = "5AL1", IdHuilu = "c2", TaoguanType="SC",CircuitBreaker_Brand="schneider"},
+                new XTTHuiluDto {IdGuihao = "5AL1", IdHuilu = "N1", TaoguanType="SC",CircuitBreaker_Brand="schneider"},
+                new XTTHuiluDto {IdGuihao = "5AL1", IdHuilu = "k1", TaoguanType="SC",CircuitBreaker_Brand="schneider"},
+            };
 
+            //为回路添加默认值
+            foreach (var t in XTTHuilus)
+            {
+                //默认的功率、回路类型、相位、导体类型
+                //t.Methos_CalDefalutPe();
+            }
+
+
+
+
+            //automapper用于 XTTHuiluDto与DatagridHuiluDto之间的转换
+            //引入automapper
+            // 配置映射
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<XTTHuiluDto, DatagridHuiluDto>();
+            });
+            var mapper = config.CreateMapper();
+
+            //XTTHuiluDto source = new XTTHuiluDto();
+            List<DatagridHuiluDto> target = mapper.Map<List<DatagridHuiluDto>>(XTTHuilus);
+
+            // 创建一个新的 ObservableCollection 并将 target 中的元素添加进去
+            var newCollection = new ObservableCollection<DatagridHuiluDto>(target);
+
+            // 将新的集合赋值给 DatagridHuilu 属性
+            DatagridHuilu = newCollection;
+
+            //MessageBox.Show("方向1  automapper赋值结束");
+
+            // 配置映射
+            var config2 = new MapperConfiguration(cfg2 =>
+            {
+                cfg2.CreateMap<DatagridHuiluDto,XTTHuiluDto >();
+            });
+            var mapper2 = config2.CreateMapper();
+
+
+            //XTTHuiluDto source = new XTTHuiluDto();
+            List<XTTHuiluDto> target2 = mapper.Map<List<XTTHuiluDto>>(DatagridHuilu);
+
+            //MessageBox.Show("方向2  automapper赋值结束");
 
 
 
@@ -76,15 +132,17 @@ namespace WpfApp1
 
         private void Test2(DatagridHuiluDto item)
         {
-            item.IQueryCable(); // 调用查询方法
+            item.Methos_CalDefalutPe();
+            item.IQuery_Cable(); // 调用查询方法
+            item.IQuery_CircuitBreaker(); // 调用查询方法
             if (item.IsChecked)
             {
-                MessageBox.Show($"勾选框已选中，第三列内容: {item.IdGuihao}");
+                //MessageBox.Show($"勾选框已选中，第三列内容: {item.IdGuihao}");
             }
             else
             {
                 int index = DatagridHuilu.IndexOf(item) + 1;
-                MessageBox.Show($"勾选框未选中，行号: {index}");
+                //MessageBox.Show($"勾选框未选中，行号: {index}");
             }
         }
 
