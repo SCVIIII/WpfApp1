@@ -8,9 +8,9 @@
     Title="Variable Height Cells"
     Width="1440"
     Height="900">
-
     <Window.Resources>
         <ResourceDictionary>
+
             <ResourceDictionary.MergedDictionaries>
                 <materialDesign:BundledTheme
                     BaseTheme="Light"
@@ -18,20 +18,16 @@
                     SecondaryColor="Lime" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            <!--  定义 DataGridColumnHeader 的样式  -->
-            <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
-                <Setter Property="FontSize" Value="12" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-            </Style>
         </ResourceDictionary>
 
 
     </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="6*" />
+            <RowDefinition Height="0.2*" />
+            <RowDefinition Height="8*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -41,113 +37,197 @@
         </Grid.ColumnDefinitions>
 
 
-
-        <Button
+        <StackPanel
             Grid.Row="0"
-            Grid.Column="0"
-            Content="按钮" />
-
-        <!--  使用 Border 包裹 ScrollViewer 并设置边框样式  -->
-        <Border
-            Grid.Row="1"
             Grid.Column="1"
             Grid.ColumnSpan="2"
-            BorderBrush="#484843 "
-            BorderThickness="0.5"
-            CornerRadius="5">
+            HorizontalAlignment="Left">
+            <ComboBox
+                Width="256"
+                Margin="10,5,5,0"
+                materialDesign:HintAssist.HelperText="断路器品牌"
+                materialDesign:HintAssist.Hint="断路器品牌"
+                ItemsSource="{Binding Items_CircuitBreaker_Brand}"
+                SelectedItem="{Binding CircuitBreaker_Brand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Style="{StaticResource MaterialDesignFilledComboBox}" />
+        </StackPanel>
+        <!--  SelectedItem="{Binding CircuitBreaker_Brand, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  -->
+        <Button
+            Grid.Row="2"
+            Grid.Column="2"
+            Width="150"
+            Margin="5"
+            HorizontalAlignment="Right"
+            Content="按钮" />
 
-            <DataGrid
-                x:Name="myDataGrid"
-                HorizontalAlignment="Left"
-                AutoGenerateColumns="False"
-                CanUserAddRows="False"
-                CellEditEnding="MyDataGrid_CellEditEnding"
-                ItemsSource="{Binding DatagridHuilu}">
+        <Border
+            Grid.Row="1"
+            Grid.ColumnSpan="3"
+            Margin="0,10,0,0"
+            Background="Gray" />
 
-                <DataGrid.Columns>
+        <materialDesign:Card
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            UniformCornerRadius="0">
+            <!--  使用 Border 包裹 ScrollViewer 并设置边框样式  -->
+            <!--  Border中为核心datagrid  -->
 
+            <TabControl
+                Height="1200"
+                Margin="0"
+                ItemsSource="{Binding GroupedHuilus}"
+                SelectedIndex="0"
+                Style="{StaticResource MaterialDesignFilledTabControl}"
+                TabStripPlacement="Left">
 
-                    <!--  第一列：勾选框  -->
-                    <DataGridTemplateColumn Header="选择">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                <!--  定义Tab头样式  -->
+                <!--  动态生成TabItem  -->
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding IdGuihao}" />
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
 
-                    <!--  第二列：按钮  -->
-                    <DataGridTemplateColumn Header="操作">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
+                <!--  定义每个Tab的内容  -->
+                <TabControl.ContentTemplate>
 
-                                <Button
-                                    Width="60"
-                                    Height="auto"
-                                    Margin="0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Command="{Binding DataContext.OnButtonClick, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    CommandParameter="{Binding}"
-                                    Content="点击"
-                                    FontSize="10" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="15*" />
+                            </Grid.RowDefinitions>
+                            <!--  每个TabItem的内容是一个DataGrid  -->
+                            <DataGrid
+                                x:Name="myDataGrid"
+                                Grid.Row="1"
+                                HorizontalAlignment="Left"
+                                AutoGenerateColumns="False"
+                                CanUserAddRows="False"
+                                CellEditEnding="MyDataGrid_CellEditEnding"
+                                ItemsSource="{Binding Huilus}">
 
-                    <!--  第三列：显示的字符串  -->
-                    <DataGridTextColumn
-                        Width="80"
-                        Binding="{Binding IdGuihao}"
-                        FontSize="14"
-                        Header="所属箱号"
-                        IsReadOnly="True" />
-                    <DataGridTextColumn Binding="{Binding IdHuilu}" Header="回路号" />
-                    <DataGridTextColumn Binding="{Binding Pe, Mode=TwoWay}" Header="Pe" />
-                    <DataGridTextColumn Binding="{Binding Izd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="In" />
-                    <DataGridTemplateColumn Header="导体类型">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding DataContext.ItemsCableType, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding CableType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Binding="{Binding Cable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="导体截面" />
-                    <DataGridTextColumn Binding="{Binding CircuitBreaker_CD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="C/D曲线" />
-                    <DataGridTemplateColumn Header="单相三相">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding DataContext.Items_CircuitBreaker_Type, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding CircuitBreaker_Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="套管">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding DataContext.ItemsTaoguan, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding TaoguanType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Binding="{Binding Fushe}" Header="敷设" />
-                    <DataGridTextColumn Binding="{Binding PurposeType}" Header="回路类型" />
-
-                    <DataGridTemplateColumn Header="回路类型">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding DataContext.Items_Huilu_Purpose, RelativeSource={RelativeSource AncestorType=DataGrid}}" SelectedItem="{Binding PurposeType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTextColumn Binding="{Binding TaoguanCSA}" Header="套管截面" />
-
-                    <DataGridTextColumn Header="回路功能" />
-                    <DataGridTextColumn Header="风机用途" />
+                                <DataGrid.Columns>
+                                    <!--  by default a DataGridCheckBoxColumn will have the MaterialDesignDataGridCheckBoxColumnStyle and MaterialDesignDataGridCheckBoxColumnEditingStyle applied. See DataGridAssist.ApplyMaterialDesignColumnStyles attached property  -->
+                                    <DataGridCheckBoxColumn>
+                                        <DataGridCheckBoxColumn.Header>
+                                            <Border Background="Transparent">
+                                                <CheckBox />
+                                            </Border>
+                                        </DataGridCheckBoxColumn.Header>
+                                        <DataGridCheckBoxColumn.HeaderStyle>
+                                            <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGridCheckBoxColumn.HeaderStyle>
+                                    </DataGridCheckBoxColumn>
 
 
-                </DataGrid.Columns>
-            </DataGrid>
+                                    <!--  第一列：勾选框  -->
+                                    <DataGridTemplateColumn>
+                                        <DataGridTemplateColumn.Header>
+                                            <Border Background="Transparent">
+                                                <CheckBox IsChecked="{Binding DataContext.IsAllItems1Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                            </Border>
+                                        </DataGridTemplateColumn.Header>
+                                        <DataGridTemplateColumn.HeaderStyle>
+                                            <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="{x:Type DataGridColumnHeader}">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                            </Style>
+                                        </DataGridTemplateColumn.HeaderStyle>
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
 
-        </Border>
+                                    <!--  第二列：按钮  -->
+                                    <DataGridTemplateColumn Header="操作">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+
+                                                <Button
+                                                    Width="60"
+                                                    Height="auto"
+                                                    Margin="0"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Command="{Binding DataContext.OnButtonClick, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    CommandParameter="{Binding}"
+                                                    Content="点击"
+                                                    FontSize="10" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <!--  第三列：显示的字符串  -->
+                                    <DataGridTextColumn
+                                        Width="80"
+                                        Binding="{Binding IdGuihao}"
+                                        FontSize="14"
+                                        Header="所属箱号"
+                                        IsReadOnly="True" />
+                                    <DataGridTextColumn Binding="{Binding IdHuilu}" Header="回路号" />
+                                    <DataGridTextColumn Binding="{Binding Pe, Mode=TwoWay}" Header="Pe" />
+                                    <DataGridTextColumn Binding="{Binding Izd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="In" />
+                                    <DataGridTemplateColumn Header="导体类型">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ComboBox ItemsSource="{Binding DataContext.ItemsCableType, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" SelectedItem="{Binding CableType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Binding="{Binding Cable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="导体截面" />
+                                    <DataGridTextColumn Binding="{Binding CircuitBreaker_CD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="C/D曲线" />
+                                    <DataGridTemplateColumn Header="单相三相">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ComboBox ItemsSource="{Binding DataContext.Items_CircuitBreaker_Type, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" SelectedItem="{Binding CircuitBreaker_Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="套管">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ComboBox ItemsSource="{Binding DataContext.ItemsTaoguan, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" SelectedItem="{Binding TaoguanType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTextColumn Binding="{Binding Fushe}" Header="敷设" />
+                                    <DataGridTextColumn Binding="{Binding PurposeType}" Header="回路类型" />
+
+                                    <DataGridTemplateColumn Header="回路类型">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ComboBox ItemsSource="{Binding DataContext.Items_Huilu_Purpose, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" SelectedItem="{Binding PurposeType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTextColumn Binding="{Binding TaoguanCSA}" Header="套管截面" />
+
+                                    <DataGridTextColumn Header="回路功能" />
+                                    <DataGridTextColumn Header="风机用途" />
+
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+
+
+
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+            </TabControl>
+
+
+        </materialDesign:Card>
+
+
     </Grid>
 </Window>

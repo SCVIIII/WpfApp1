@@ -16,11 +16,14 @@ using static System.Net.Mime.MediaTypeNames;
 using IFOXSQLiteCodes01;
 using AutoMapper;
 using static MaterialDesignThemes.Wpf.Theme;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace WpfApp1
 {
     public partial  class XTTViewModel : ObservableObject
     {
+
         #region combox的数据源
         //combox的数据源
         //单相三相
@@ -35,6 +38,8 @@ namespace WpfApp1
         //存放筛选处理后的配电箱及对应回路信息
         [ObservableProperty]
         private List<string> _items_Huilu_Purpose;
+        [ObservableProperty]
+        private ObservableCollection<GroupedHuilu> _groupedHuilus;
 
         #endregion
 
@@ -54,6 +59,32 @@ namespace WpfApp1
             get => _datadridhuilus;
             set => SetProperty(ref _datadridhuilus, value);  // SetProperty 自动触发通知
         }
+
+
+        //public bool? IsAllItems1Selected
+        //{
+        //    get
+        //    {
+        //        var selected = DatagridHuilu.Select(item => item.IsChecked).Distinct().ToList();
+        //        return selected.Count == 1 ? selected.Single() : (bool?)null;
+        //    }
+        //    set
+        //    {
+        //        if (value.HasValue)
+        //        {
+        //            SelectAll(value.Value, models);
+        //            OnPropertyChanged();
+        //        }
+        //    }
+        //}
+
+        //private static void SelectAll(bool select, GroupedHuilu models)
+        //{
+        //    foreach (var model in models)
+        //    {
+        //        model.Huilus = select;
+        //    }
+        //}
 
         public  XTTViewModel()
         {
@@ -75,16 +106,31 @@ namespace WpfApp1
                 new XTTHuiluDto {IdGuihao = "5AL1", IdHuilu = "c2", TaoguanType="SC",CircuitBreaker_Brand="schneider"},
                 new XTTHuiluDto {IdGuihao = "5AL1", IdHuilu = "N1", TaoguanType="SC",CircuitBreaker_Brand="schneider"},
                 new XTTHuiluDto {IdGuihao = "5AL1", IdHuilu = "k1", TaoguanType="SC",CircuitBreaker_Brand="schneider"},
+                new XTTHuiluDto {IdGuihao = "5AL2", IdHuilu = "c1", TaoguanType="SC",CircuitBreaker_Brand="schneider"},
+                new XTTHuiluDto {IdGuihao = "5AL2", IdHuilu = "c2", TaoguanType="SC",CircuitBreaker_Brand="schneider"},
+                new XTTHuiluDto {IdGuihao = "5AL3", IdHuilu = "N1", TaoguanType="SC",CircuitBreaker_Brand="schneider"},
+                new XTTHuiluDto {IdGuihao = "5AL3", IdHuilu = "k1", TaoguanType="SC",CircuitBreaker_Brand="schneider"},
             };
 
             //为回路添加默认值
-            foreach (var t in XTTHuilus)
+            foreach (var item in XTTHuilus)
             {
-                //默认的功率、回路类型、相位、导体类型
-                //t.Methos_CalDefalutPe();
+                item.Methos_CalDefalutPe();
+                item.IQuery_Cable(); // 调用查询方法
+                item.IQuery_CircuitBreaker(); // 调用查询方法  //品牌选项待添加
             }
 
+            //测试用
+            // 在ViewModel构造函数中配置AutoMapper
+            var config1 = new MapperConfiguration(cfg =>
+            {
+                // 如果需要从XTTHuiluDto到DatagridHuiluDto的映射
+                cfg.CreateMap<XTTHuiluDto, DatagridHuiluDto>()
+                   .ForMember(dest => dest.IsChecked, opt => opt.Ignore())
+                   .ForMember(dest => dest.ButtonText, opt => opt.Ignore());
+            });
 
+            var mapper = config1.CreateMapper();
 
 
             //automapper用于 XTTHuiluDto与DatagridHuiluDto之间的转换
@@ -94,10 +140,10 @@ namespace WpfApp1
             {
                 cfg.CreateMap<XTTHuiluDto, DatagridHuiluDto>();
             });
-            var mapper = config.CreateMapper();
+            var mapper1 = config.CreateMapper();
 
             //XTTHuiluDto source = new XTTHuiluDto();
-            List<DatagridHuiluDto> target = mapper.Map<List<DatagridHuiluDto>>(XTTHuilus);
+            List<DatagridHuiluDto> target = mapper1.Map<List<DatagridHuiluDto>>(XTTHuilus);
 
             // 创建一个新的 ObservableCollection 并将 target 中的元素添加进去
             var newCollection = new ObservableCollection<DatagridHuiluDto>(target);
@@ -116,7 +162,7 @@ namespace WpfApp1
 
 
             //XTTHuiluDto source = new XTTHuiluDto();
-            List<XTTHuiluDto> target2 = mapper.Map<List<XTTHuiluDto>>(DatagridHuilu);
+            List<XTTHuiluDto> target2 = mapper1.Map<List<XTTHuiluDto>>(DatagridHuilu);
 
             //MessageBox.Show("方向2  automapper赋值结束");
 
@@ -124,6 +170,21 @@ namespace WpfApp1
 
             #endregion
 
+
+            
+            GroupedHuilus = new ObservableCollection<GroupedHuilu>(
+            XTTHuilus.GroupBy(x => x.IdGuihao)
+                     .Select(g => new GroupedHuilu
+                     {
+                         IdGuihao = g.Key,
+                         Huilus = new ObservableCollection<DatagridHuiluDto>(mapper.Map<ObservableCollection<DatagridHuiluDto>>(g))
+                     })
+        );
+
+            if(true)
+            {
+
+            }
 
         }
 
@@ -178,6 +239,17 @@ namespace WpfApp1
 
     }
 
+    public class GroupedHuilu
+    {
+        public string IdGuihao { get; set; }
+        public ObservableCollection<DatagridHuiluDto> Huilus { get; set; }
+    }
+
+    public class GroupedHuilu2 : XTTHuiluDto
+    {
+        public string IdGuihao { get; set; }
+        public ObservableCollection<DatagridHuiluDto> Huilus { get; set; }
+    }
 
 }
 
